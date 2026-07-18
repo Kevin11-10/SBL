@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Mini DLS26 League - Tournament Dashboard</title>
-    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
     <div class="container">
@@ -21,6 +21,7 @@
             <button class="tab-btn" data-tab="fixtures">Fixtures & Results</button>
             <button class="tab-btn" data-tab="stats">Player Stats</button>
             <button class="tab-btn" data-tab="add-result">Add Result</button>
+            <button class="tab-btn" data-tab="data-export">Data</button>
         </nav>
 
         <!-- League Table Tab -->
@@ -168,9 +169,40 @@
                 <button type="submit" class="btn-primary">Save Match Result</button>
             </form>
         </section>
+
+        <!-- Data Export/Import Tab -->
+        <section id="data-export" class="tab-content">
+            <h2>Data Management</h2>
+            
+            <div class="form-section">
+                <h3>📥 Export Data</h3>
+                <p>Download all your tournament data as a JSON file to backup or share:</p>
+                <button type="button" class="btn-primary" onclick="downloadData()">Download Data as JSON</button>
+            </div>
+
+            <div class="form-section">
+                <h3>📤 Import Data</h3>
+                <p>Upload a previously exported JSON file to restore your data:</p>
+                <input type="file" id="file-input" accept=".json" style="padding: 10px; margin-bottom: 10px;">
+                <button type="button" class="btn-primary" onclick="uploadData()">Upload Data</button>
+            </div>
+
+            <div class="form-section">
+                <h3>🗑️ Clear All Data</h3>
+                <p>Reset the entire tournament and start fresh:</p>
+                <button type="button" class="btn-secondary" style="background: #ef4444; color: white;" onclick="if(confirm('Are you sure? This cannot be undone!')) { clearAllData(); location.reload(); }">Clear All Data</button>
+            </div>
+
+            <div class="form-section">
+                <h3>📋 Current Data Preview</h3>
+                <p>Here's your current tournament data:</p>
+                <textarea id="data-preview" readonly style="width: 100%; height: 300px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: monospace; font-size: 12px;"></textarea>
+                <button type="button" class="btn-secondary" onclick="document.getElementById('data-preview').select(); document.execCommand('copy');" style="margin-top: 10px;">Copy to Clipboard</button>
+            </div>
+        </section>
     </div>
 
-    <script src="data.js?v=2"></script>
-    <script src="app.js?v=2"></script>
+    <script src="data.js?v=3"></script>
+    <script src="app.js?v=3"></script>
 </body>
 </html>
