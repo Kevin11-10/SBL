@@ -2,8 +2,6 @@
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    // Clear old cached data to load new fixtures
-    localStorage.removeItem('mini-dls26-league');
     initializeApp();
 });
 
@@ -14,6 +12,7 @@ function initializeApp() {
     populatePlayerStats();
     setupResultForm();
     updateMatchSelect();
+    updateDataPreview();
 }
 
 // ============ TAB NAVIGATION ============
@@ -32,6 +31,11 @@ function setupTabNavigation() {
             // Activate selected tab
             btn.classList.add('active');
             document.getElementById(tabName).classList.add('active');
+            
+            // Update preview if switching to data tab
+            if (tabName === 'data-export') {
+                updateDataPreview();
+            }
         });
     });
 }
@@ -399,18 +403,81 @@ function handleResultSubmit(e) {
     document.querySelector('[data-tab="standings"]').click();
 }
 
+// ============ DATA MANAGEMENT ============
+function updateDataPreview() {
+    const preview = document.getElementById('data-preview');
+    if (preview) {
+        preview.value = JSON.stringify(leagueData, null, 2);
+    }
+}
+
+function downloadData() {
+    const dataStr = JSON.stringify(leagueData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `mini-dls26-league-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showAlert('Data downloaded successfully!', 'success');
+}
+
+function uploadData() {
+    const fileInput = document.getElementById('file-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        showAlert('Please select a file', 'error');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            
+            // Validate the imported data has expected structure
+            if (!importedData.fixtures || !Array.isArray(importedData.fixtures)) {
+                throw new Error('Invalid data format');
+            }
+
+            // Import the data
+            leagueData = importedData;
+            saveData();
+            updateDataPreview();
+            
+            // Refresh all views
+            populateStandings();
+            populateFixtures();
+            populatePlayerStats();
+            updateMatchSelect();
+            
+            showAlert('Data imported successfully!', 'success');
+            fileInput.value = ''; // Clear file input
+        } catch (error) {
+            showAlert(`Error importing data: ${error.message}`, 'error');
+        }
+    };
+    reader.readAsText(file);
+}
+
 // ============ UTILITY FUNCTIONS ============
 function showAlert(message, type) {
     const tabContent = document.querySelector('.tab-content.active');
-    const alert = document.createElement('div');
-    alert.className = `alert alert-${type}`;
-    alert.textContent = message;
+    if (tabContent) {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        alert.textContent = message;
 
-    tabContent.insertBefore(alert, tabContent.firstChild);
+        tabContent.insertBefore(alert, tabContent.firstChild);
 
-    setTimeout(() => {
-        alert.remove();
-    }, 4000);
+        setTimeout(() => {
+            alert.remove();
+        }, 4000);
+    }
 }
 
 // Refresh all data when tabs change
@@ -428,6 +495,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     populatePlayerStats();
                 } else if (activeTab === 'add-result') {
                     updateMatchSelect();
+                } else if (activeTab === 'data-export') {
+                    updateDataPreview();
                 }
             }, 100);
         });
