@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini DLS26 League - Tournament Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏆 Mini DLS26 League</h1>
+            <p>8-Team Home & Away Tournament</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="standings">League Table</button>
+            <button class="tab-btn" data-tab="fixtures">Fixtures & Results</button>
+            <button class="tab-btn" data-tab="stats">Player Stats</button>
+            <button class="tab-btn" data-tab="add-result">Add Result</button>
+        </nav>
+
+        <!-- League Table Tab -->
+        <section id="standings" class="tab-content active">
+            <h2>League Standings</h2>
+            <table class="league-table">
+                <thead>
+                    <tr>
+                        <th>Pos</th>
+                        <th>Team</th>
+                        <th>P</th>
+                        <th>W</th>
+                        <th>D</th>
+                        <th>L</th>
+                        <th>GF</th>
+                        <th>GA</th>
+                        <th>GD</th>
+                        <th>Pts</th>
+                        <th>Cards</th>
+                    </tr>
+                </thead>
+                <tbody id="standings-body">
+                    <!-- Populated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Fixtures Tab -->
+        <section id="fixtures" class="tab-content">
+            <h2>Fixtures & Results</h2>
+            <div class="filters">
+                <select id="fixture-filter">
+                    <option value="all">All Matches</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div id="fixtures-list" class="fixtures-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Player Stats Tab -->
+        <section id="stats" class="tab-content">
+            <h2>Top Scorers & Assists</h2>
+            <div class="stats-container">
+                <div class="stat-section">
+                    <h3>Top Scorers</h3>
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th>Team</th>
+                                <th>Goals</th>
+                            </tr>
+                        </thead>
+                        <tbody id="top-scorers">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="stat-section">
+                    <h3>Top Assists</h3>
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th>Team</th>
+                                <th>Assists</th>
+                            </tr>
+                        </thead>
+                        <tbody id="top-assists">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="stat-section">
+                    <h3>G&A (Goals + Assists)</h3>
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th>Team</th>
+                                <th>G&A</th>
+                            </tr>
+                        </thead>
+                        <tbody id="top-ga">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Result Tab -->
+        <section id="add-result" class="tab-content">
+            <h2>Record Match Result</h2>
+            <form id="result-form" class="result-form">
+                <div class="form-group">
+                    <label for="match-select">Select Match:</label>
+                    <select id="match-select" required>
+                        <option value="">-- Choose a match --</option>
+                    </select>
+                </div>
+
+                <div class="form-group two-col">
+                    <div>
+                        <label for="home-score">Home Score:</label>
+                        <input type="number" id="home-score" min="0" required value="0">
+                    </div>
+                    <div>
+                        <label for="away-score">Away Score:</label>
+                        <input type="number" id="away-score" min="0" required value="0">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Home Team Scorers</h3>
+                    <div id="home-scorers" class="scorers-section">
+                        <!-- Dynamically added -->
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="addScorerRow('home')">+ Add Goal</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>Away Team Scorers</h3>
+                    <div id="away-scorers" class="scorers-section">
+                        <!-- Dynamically added -->
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="addScorerRow('away')">+ Add Goal</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>Cards</h3>
+                    <div id="cards-section" class="cards-section">
+                        <!-- Dynamically added -->
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="addCardRow()">+ Add Card</button>
+                </div>
+
+                <button type="submit" class="btn-primary">Save Match Result</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
