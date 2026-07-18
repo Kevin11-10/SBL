@@ -2,14 +2,14 @@
 
 // Teams - 8 teams in the league
 const TEAMS = [
-    { id: 1, name: 'Team Alpha' },
-    { id: 2, name: 'Team Bravo' },
-    { id: 3, name: 'Team Charlie' },
-    { id: 4, name: 'Team Delta' },
-    { id: 5, name: 'Team Echo' },
-    { id: 6, name: 'Team Foxtrot' },
-    { id: 7, name: 'Team Golf' },
-    { id: 8, name: 'Team Hotel' }
+    { id: 1, name: "Kevin's Team", manager: 'Kevin' },
+    { id: 2, name: "David O.'s Squad", manager: 'David O.' },
+    { id: 3, name: "David A. United", manager: 'David A.' },
+    { id: 4, name: "Oba FC", manager: 'Oba' },
+    { id: 5, name: "Layomi FC", manager: 'Layomi' },
+    { id: 6, name: "Somto United", manager: 'Somto' },
+    { id: 7, name: "Divine FC", manager: 'Divine' },
+    { id: 8, name: "Ebenezer United", manager: 'Ebenezer' }
 ];
 
 // Generate all fixtures (home and away for 8 teams = 56 matches total)
@@ -131,6 +131,7 @@ function calculateStandings() {
     const standings = TEAMS.map(team => ({
         teamId: team.id,
         teamName: team.name,
+        manager: team.manager,
         played: 0,
         won: 0,
         drawn: 0,
