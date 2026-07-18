@@ -2,7 +2,7 @@
 
 // Teams - 8 teams in the league (using manager names)
 const TEAMS = [
-    { id: 1, name: "Kevin's Team", manager: 'Kevin' },
+    { id: 1, name: "Manchester United", manager: 'Kevin' },
     { id: 2, name: "Otokolo FC", manager: 'Otokolo' },
     { id: 3, name: "Divine FC", manager: 'Divine' },
     { id: 4, name: "Adedoyin United", manager: 'Adedoyin' },
