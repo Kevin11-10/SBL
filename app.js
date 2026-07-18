@@ -2,6 +2,8 @@
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
+    // Clear old cached data to load new team names
+    localStorage.removeItem('mini-dls26-league');
     initializeApp();
 });
 
@@ -46,6 +48,7 @@ function populateStandings() {
         row.innerHTML = `
             <td><strong>${index + 1}</strong></td>
             <td><strong>${team.teamName}</strong></td>
+            <td><em>${team.manager}</em></td>
             <td>${team.played}</td>
             <td>${team.won}</td>
             <td>${team.drawn}</td>
