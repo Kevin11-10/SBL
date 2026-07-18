@@ -2,7 +2,7 @@
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    // Clear old cached data to load new team names
+    // Clear old cached data to load new fixtures
     localStorage.removeItem('mini-dls26-league');
     initializeApp();
 });
@@ -81,9 +81,36 @@ function populateFixtures() {
         return;
     }
 
+    // Group fixtures by round
+    const fixturesByRound = {};
     fixtures.forEach(fixture => {
-        const card = createFixtureCard(fixture);
-        fixturesContainer.appendChild(card);
+        const round = fixture.round || 1;
+        if (!fixturesByRound[round]) {
+            fixturesByRound[round] = [];
+        }
+        fixturesByRound[round].push(fixture);
+    });
+
+    // Sort rounds numerically and display
+    const sortedRounds = Object.keys(fixturesByRound).sort((a, b) => parseInt(a) - parseInt(b));
+    
+    sortedRounds.forEach(round => {
+        // Add round header
+        const roundHeader = document.createElement('div');
+        roundHeader.className = 'matchday-header';
+        roundHeader.innerHTML = `<h3>Matchday ${round}</h3>`;
+        fixturesContainer.appendChild(roundHeader);
+
+        // Add fixtures for this round
+        const roundFixtures = document.createElement('div');
+        roundFixtures.className = 'matchday-group';
+        
+        fixturesByRound[round].forEach(fixture => {
+            const card = createFixtureCard(fixture);
+            roundFixtures.appendChild(card);
+        });
+        
+        fixturesContainer.appendChild(roundFixtures);
     });
 }
 
@@ -127,7 +154,6 @@ function createFixtureCard(fixture) {
     }
 
     card.innerHTML = `
-        <div class="fixture-header">Matchday 1</div>
         <div class="fixture-match">
             <div class="team">
                 <div class="team-name">${fixture.homeTeamName}</div>
@@ -233,11 +259,31 @@ function updateMatchSelect() {
 
     const pendingMatches = getPendingFixtures();
 
+    // Group by round
+    const matchesByRound = {};
     pendingMatches.forEach(fixture => {
-        const option = document.createElement('option');
-        option.value = fixture.id;
-        option.textContent = `${fixture.homeTeamName} vs ${fixture.awayTeamName}`;
-        matchSelect.appendChild(option);
+        const round = fixture.round || 1;
+        if (!matchesByRound[round]) {
+            matchesByRound[round] = [];
+        }
+        matchesByRound[round].push(fixture);
+    });
+
+    // Add options grouped by matchday
+    const sortedRounds = Object.keys(matchesByRound).sort((a, b) => parseInt(a) - parseInt(b));
+    
+    sortedRounds.forEach(round => {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = `Matchday ${round}`;
+        
+        matchesByRound[round].forEach(fixture => {
+            const option = document.createElement('option');
+            option.value = fixture.id;
+            option.textContent = `${fixture.homeTeamName} vs ${fixture.awayTeamName}`;
+            optgroup.appendChild(option);
+        });
+        
+        matchSelect.appendChild(optgroup);
     });
 }
 
